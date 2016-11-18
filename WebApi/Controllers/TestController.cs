@@ -11,7 +11,7 @@ namespace WebApi.Controllers
     {
         public object Get()
         {
-            return "OK";
+            return "OK:"+CurrentPayload().UserId;
         }
     }
 }

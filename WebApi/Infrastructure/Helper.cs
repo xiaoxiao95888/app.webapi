@@ -21,7 +21,7 @@ namespace WebApi.Infrastructure
 
         public static string ToBase64String(string json)
         {
-            var encode = System.Text.Encoding.ASCII;
+            var encode = System.Text.Encoding.Default;
             var bytedata = encode.GetBytes(json);
             return Convert.ToBase64String(bytedata, 0, bytedata.Length);
         }

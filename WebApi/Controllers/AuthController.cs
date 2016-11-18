@@ -8,7 +8,7 @@ using WebApi.Models.jwt;
 namespace WebApi.Controllers
 {
     [AllowAnonymous]
-    public class AuthController : BaseApiController
+    public class AuthController : ApiController
     {
         public object Get()
         {

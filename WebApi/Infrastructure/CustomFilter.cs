@@ -18,7 +18,15 @@ namespace WebApi.Infrastructure
         {
             var error = true;
             const string key = "Authorization";
-            var token = filterContext.Request.Headers.GetValues(key).First();
+            var token = string.Empty;
+            try
+            {
+                token = filterContext.Request.Headers.GetValues(key).FirstOrDefault();
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
             var segments = token?.Split('.');
             if (segments?.Length == 3)
             {
@@ -27,10 +35,8 @@ namespace WebApi.Infrastructure
                 var signatureSeg = segments[2];
                 if (headerSeg != null && payloadSeg != null && signatureSeg != null)
                 {
-                    payloadSeg = System.Text.Encoding.Default.GetString(Convert.FromBase64String(payloadSeg));
-                    headerSeg = System.Text.Encoding.Default.GetString(Convert.FromBase64String(headerSeg));
                     var secret = ConfigurationManager.AppSettings["Secret"];
-                    var payload = JsonConvert.DeserializeObject<Payload>(payloadSeg);
+                    var payload = JsonConvert.DeserializeObject<Payload>(System.Text.Encoding.Default.GetString(Convert.FromBase64String(payloadSeg)));
                     if (payload.ExpirationTime >= DateTime.UtcNow)
                     {
                         var signature = Helper.SHA1_Hash(headerSeg + payloadSeg + secret);
